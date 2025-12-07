@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Algoritmo do Sabor</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta de Cores */
+            --cor-principal: #faa330; /* Laranja */
+            --cor-secundaria: #f6e4ca; /* Laranja Claro */
+            --cor-texto-escuro: #372216; /* Marrom Escuro */
+            --cor-texto-claro: #b35d1a; /* Marrom Claro */
+        }
+
+        /* Estilos Gerais */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF; 
+            color: var(--cor-texto-escuro);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Títulos em Negrito */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700; 
+            letter-spacing: -0.5px; 
+        }
+
+        /* Cabeçalho */
+        .header {
+            background-color: var(--cor-principal);
+            color: var(--cor-texto-escuro); 
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .header .tagline {
+            font-size: 1.2em;
+            margin-top: 5px;
+            font-weight: 400; 
+        }
+        
+        /* Layout Principal */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* Estilo para Títulos de Seção */
+        .container h2 {
+            color: var(--cor-principal);
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700; 
+        }
+
+        /* Seções */
+        #sobre-nos, #localizacao {
+            padding: 40px 0;
+            background-color: var(--cor-secundaria); 
+            border-top: 2px solid var(--cor-principal);
+            border-bottom: 2px solid var(--cor-principal);
+            text-align: center;
+        }
+        
+        #sobre-nos p {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        #algoritmo {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 2px solid var(--cor-principal);
+        }
+        
+        .aviso-local {
+            background-color: var(--cor-principal);
+            color: var(--cor-texto-escuro);
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 15px auto;
+        }
+
+        .aviso-local strong {
+            display: block;
+            font-size: 1.2em;
+            margin-top: 5px;
+            font-weight: 700; 
+        }
+
+        /* Seção de Produtos */
+        #produtos {
+            padding: 40px 0;
+        }
+
+        .lista-produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .produto-card {
+            background-color: var(--cor-secundaria); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .produto-card img {
+            width: 100%; 
+            height: auto;
+            max-height: 200px; 
+            object-fit: cover; 
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .produto-card h3 {
+            color: var(--cor-texto-escuro);
+            margin-top: 0;
+            font-size: 1.5em;
+            font-weight: 700; 
+        }
+
+        .produto-card .descricao {
+            font-size: 0.95em;
+            margin-bottom: 15px;
+        }
+
+        .produto-card .valor {
+            font-size: 1.4em;
+            font-weight: 700; 
+            color: var(--cor-principal);
+            text-align: right;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            padding-top: 10px;
+        }
+
+        /* --- RODAPÉ E LINKS SOCIAIS (ATUALIZADO) --- */
+        .footer {
+            background-color: var(--cor-texto-escuro);
+            color: var(--cor-secundaria);
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        /* Novo container flex para os links */
+        .social-links-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px; /* Espaço entre os links */
+            margin-bottom: 20px;
+        }
+
+        .social-link-item {
+            color: var(--cor-principal);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: color 0.3s, transform 0.3s;
+            /* Alinha o ícone e o texto verticalmente */
+            display: flex; 
+            align-items: center;
+            gap: 10px; /* Espaço entre ícone e texto */
+        }
+
+        .social-link-item:hover {
+            color: var(--cor-secundaria);
+            transform: scale(1.05); /* Leve aumento ao passar o mouse */
+        }
+
+        /* Estilo GERAL para os ícones de imagem no rodapé */
+        .social-icon-img {
+            width: 30px; /* Aumentei para 30px para ficar mais visível */
+            height: 30px;
+            object-fit: contain;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.3)); /* Sombra suave */
+        }
+
+        /* AJUSTE FINO: Aumenta SÓ o WhatsApp para compensar visualmente o formato redondo */
+        #icone-whats-footer {
+            width: 40px; 
+            height: 40px;
+            margin-bottom: -2px; /* Pequeno ajuste de alinhamento */
+        }
+
+        /* Botão Flutuante do WhatsApp */
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #25d366; 
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #128c7e;
+            transform: scale(1.05);
+        }
+
+        /* Estilo da Imagem (Logo Simulado) */
+        .logo img {
+            height: 150px; 
+            width: auto;
+        }
+        .logo h1 {
+            display: inline-block;
+            vertical-align: top;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <img src="DOCE_CAMADA__2_-removebg-preview.png" alt="Logo Sabor.AI"> 
+            <h1></h1>
+        </div>
+        <p class="tagline"></p>
+    </header>
+
+    <section id="sobre-nos" class="container">
+        <h2>SAIBA MAIS SOBRE NÓS</h2>
+        <p>
+            O Algoritmo Sabor é um pequeno empreendimento focado em ser seu Data Center de delícias. Especializado na produção e venda de bolos com coberturas e  canudinhos recheados salgados, somos o "código-fonte" que une a precisão da tecnologia com o sabor acolhedor de casa, garantindo que cada mordida seja a fórmula exata para a sua fome e feita com ingredientes de altíssima qualidade.        </p>
+    </section>
+    
+    <section id="localizacao" class="container">
+        <h2>ONDE NOS ENCONTRAR</h2>
+        <div class="aviso-local">
+            <p> 
+                Venha experimentar nossas delícias na Feira de Empreendedorismo da UFERSA:
+            </p>
+            <strong> Data: 9 de Dezembro de 2025</strong>
+            <strong> Horário: Das 15h às 20h</strong>
+            <strong> Local: Centro de Convivência - UFERSA.</strong>
+        </div>
+    </section>
+
+    <section id="produtos" class="container">
+        <h2>NOSSOS PRODUTOS</h2>
+        <div class="lista-produtos">
+            
+            <div class="produto-card">
+                <img src="Captura_de_tela_2025-12-06_170934-removebg-preview (1).png" alt="Combo Canudinhos de Frango">
+                <h3>Combo Canudinhos de Frango (5 unidades)</h3>
+                <p class="descricao">Experimente nosso combo de canudinhos crocantes recheados com creme de frango, ideais para quem busca um lanche saboroso e prático na hora que bate aquela fome. O equilíbrio perfeito entre textura e sabor em cada mordida.</p>
+                <div class="valor">R$ 7,00</div>
+            </div>
+
+            <div class="produto-card">
+                <img src="bolos-removebg-preview.png" alt="Bolos diversos">
+                <h3>Bolos (Limão, Cenoura, Churros)</h3>
+                <p class="descricao">Nossos bolos são feitos com ingredientes frescos e selecionados, acompanhados de coberturas irresistíveis nos sabores mais pedidos. Cada fatia é uma explosão de sabor, perfeita para adoçar qualquer ocasião.</p>
+                <div class="valor">R$ 5,00 (fatia)</div>
+            </div>
+            
+            <div class="produto-card">
+                <img src="image-removebg-preview.png" alt="Canudinho de Frango">
+                <h3>Canudinho de Frango (unidade)</h3>
+                <p class="descricao">Experimente nossos canudinhos crocantes recheados com creme de frango, ideais para quem busca um lanche saboroso e prático na hora que bate aquela fome. O equilíbrio perfeito entre textura e sabor em cada mordida.</p>
+                <div class="valor">R$ 2,00</div>
+            </div>
+        </div>
+    </section>
+    
+    <a href="https://wa.me/5584996797733" class="whatsapp-float" target="_blank" title="Fale Conosco pelo WhatsApp">
+        💬 
+    </a>
+    
+    <footer class="footer">
+        <div class="social-links-container">
+            <a href="https://www.instagram.com/algoritmo_dosabor?igsh=MW4yb3FmbXY1Mm5uYQ==" target="_blank" class="social-link-item">
+                <img src="pngegg (1).png" alt="Ícone Instagram" class="social-icon-img">
+                Instagram
+            </a>
+            
+            <a href="#" id="link-whatsapp-footer" class="social-link-item">
+                 <img src="pngegg (3).png" alt="Ícone WhatsApp" class="social-icon-img" id="icone-whats-footer">
+                WhatsApp
+            </a>
+        </div>
+        <p>© 2025 Algoritmo do Sabor. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // --- CONFIGURAÇÃO DO WHATSAPP ---
+        const numeroWhatsApp = "5584996797733"; // <-- SEU NÚMERO
+        const mensagemPadrao = "Olá! Gostaria de saber mais sobre o Algoritmo do Sabor e produtos.";
+        
+        // Formata o link do WhatsApp
+        const linkWa = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagemPadrao)}`;
+        
+        // 1. Atualiza o link do botão flutuante
+        document.querySelector('.whatsapp-float').href = linkWa;
+        
+        // 2. Atualiza o link do WhatsApp no rodapé
+        document.getElementById('link-whatsapp-footer').href = linkWa;
+    </script>
+</body>
+</html>
